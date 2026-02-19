@@ -32,6 +32,14 @@ for item in "${FILES_TO_COPY[@]}"; do
     fi
 done
 
+# Cleanup old backgrounds if present
+if [ -f "$DEST_DIR/backgrounds/1-ravenwood.jpg" ]; then
+    rm "$DEST_DIR/backgrounds/1-ravenwood.jpg"
+fi
+if [ -f "$DEST_DIR/backgrounds/fog_forest_1.png" ]; then
+    rm "$DEST_DIR/backgrounds/fog_forest_1.png"
+fi
+
 echo "Theme installed successfully!"
 
 # Check if omarchy-theme-set is available before offering to apply
