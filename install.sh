@@ -5,12 +5,14 @@ THEMES_DIR="$HOME/.config/omarchy/themes"
 
 install_theme() {
     local theme_name="$1"
-    local source_dir="$theme_name"
+    local source_dir="$(dirname "$0")/$theme_name"
     local dest_dir="$THEMES_DIR/$theme_name"
-    local is_dark=false
 
-    if [ "$theme_name" == "ravenwood" ]; then
-        is_dark=true
+    echo "Installing $theme_name theme to $dest_dir..."
+
+    if [ ! -d "$source_dir" ]; then
+        echo "Error: Source directory '$source_dir' not found. Are you running this from the repo root?"
+        return 1
     fi
 
     echo "Installing $theme_name theme to $dest_dir..."
