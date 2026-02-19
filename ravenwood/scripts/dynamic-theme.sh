@@ -18,8 +18,16 @@ else
     MODE="Night"
 fi
 
-# Get current theme
-CURRENT_THEME=$(omarchy-theme-current)
+# Get current theme and normalize it (e.g., "Ravenwood Light" -> "ravenwood-light")
+# omarchy-theme-current returns "Ravenwood Light", but we need "ravenwood-light" for commands
+CURRENT_THEME_RAW=$(omarchy-theme-current)
+CURRENT_THEME=$(echo "$CURRENT_THEME_RAW" | tr '[:upper:]' '[:lower:]' | sed 's/ /-/g')
+
+# Only proceed if the current theme is one of our managed themes
+if [[ "$CURRENT_THEME" != "$DAY_THEME" && "$CURRENT_THEME" != "$NIGHT_THEME" ]]; then
+    # User is on a different theme (e.g. Tokyonight), don't disturb them
+    exit 0
+fi
 
 # Only switch if needed to avoid restarting things unnecessarily
 if [[ "$CURRENT_THEME" != "$TARGET_THEME" ]]; then
