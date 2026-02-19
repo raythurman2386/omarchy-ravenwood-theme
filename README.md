@@ -13,7 +13,7 @@ A custom theme collection with emerald green accents for Omarchy, available in b
 
 1.  Clone this repository:
     ```bash
-    git clone https://github.com/yourusername/omarchy-ravenwood-theme.git
+    git clone https://github.com/raythurman2386/omarchy-ravenwood-theme.git
     cd omarchy-ravenwood-theme
     ```
 2.  Run the installation script:
@@ -27,7 +27,7 @@ A custom theme collection with emerald green accents for Omarchy, available in b
 Once this repository is hosted on GitHub/GitLab, you can install it using the Omarchy theme manager:
 
 ```bash
-omarchy-theme-install https://github.com/yourusername/omarchy-ravenwood-theme.git
+omarchy-theme-install https://github.com/raythurman2386/omarchy-ravenwood-theme.git
 ```
 
 **Note:** The `omarchy-theme-install` tool might expect a single theme at the root. If it fails to detect both themes automatically, simply run `./install.sh` from inside the downloaded directory:
