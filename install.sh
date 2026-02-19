@@ -15,21 +15,15 @@ install_theme() {
         return 1
     fi
 
-    echo "Installing $theme_name theme to $dest_dir..."
-
-    if [ ! -d "$source_dir" ]; then
-        echo "Error: Source directory '$source_dir' not found. Are you running this from the repo root?"
-        return 1
-    fi
-
     # Ensure the destination directory exists
     mkdir -p "$dest_dir"
 
     # Copy contents
     cp -r "$source_dir"/* "$dest_dir/"
 
-    # Cleanup old backgrounds for ravenwood (dark)
-    if [ "$is_dark" == true ]; then
+    # Cleanup old backgrounds and setup scheduling for ravenwood (dark)
+    if [ "$theme_name" == "ravenwood" ]; then
+        echo "Cleaning up old backgrounds..."
         for old_bg in \
             "1-ravenwood.jpg" "fog_forest_1.png" \
             "1-ravenwood-glow.png" "2-ravenwood-gradient.png" \
@@ -42,13 +36,9 @@ install_theme() {
         done
         
         # Setup dynamic theme service
-        # We need absolute paths for systemd files or we copy them
         if [ -d "$dest_dir/scripts" ]; then
             echo "Setting up dynamic theme scheduling..."
             mkdir -p ~/.config/systemd/user
-            
-            # Use absolute paths for the service file content
-            # The service file we wrote has ExecStart=%h/... which is good
             
             cp "$dest_dir/scripts/omarchy-dynamic-theme.service" ~/.config/systemd/user/
             cp "$dest_dir/scripts/omarchy-dynamic-theme.timer" ~/.config/systemd/user/
