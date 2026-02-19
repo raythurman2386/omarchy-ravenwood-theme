@@ -24,18 +24,19 @@ A custom theme collection with emerald green accents for Omarchy, available in b
 
 ### Using `omarchy-theme-install`
 
-Once this repository is hosted on GitHub/GitLab, you can install it using the Omarchy theme manager:
+You can use the standard theme installer to download the repository, but you **must** run the included install script afterward to set up the dual themes correctly.
 
-```bash
-omarchy-theme-install https://github.com/raythurman2386/omarchy-ravenwood-theme.git
-```
+1.  Download the theme repository:
+    ```bash
+    omarchy-theme-install https://github.com/raythurman2386/omarchy-ravenwood-theme.git
+    ```
+    *(Note: The initial automatic theme application might fail or look incorrect because this repo contains two themes. This is normal.)*
 
-**Note:** The `omarchy-theme-install` tool might expect a single theme at the root. If it fails to detect both themes automatically, simply run `./install.sh` from inside the downloaded directory:
-
-```bash
-cd ~/.config/omarchy/themes/ravenwood-theme # (or wherever it cloned)
-./install.sh
-```
+2.  Run the setup script to install both Dark and Light variants:
+    ```bash
+    cd ~/.config/omarchy/themes/ravenwood
+    ./install.sh
+    ```
 
 ## Theme Details
 
