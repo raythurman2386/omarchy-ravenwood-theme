@@ -1,6 +1,11 @@
-# Ravenwood Theme for Omarchy
+# Ravenwood Themes for Omarchy
 
-A custom dark theme with emerald green accents for Omarchy.
+A custom theme collection with emerald green accents for Omarchy, available in both Dark and Light variants.
+
+## Themes Included
+
+*   **Ravenwood (Dark):** Deep forest green and dark grey (`#1a1f1c`) with emerald accents (`#4ade80`).
+*   **Ravenwood Light:** A lighter, airy variant with the same emerald accents.
 
 ## Installation
 
@@ -15,24 +20,32 @@ A custom dark theme with emerald green accents for Omarchy.
     ```bash
     ./install.sh
     ```
-3.  Alternatively, you can manually copy the files to `~/.config/omarchy/themes/ravenwood/`.
+    This will install both `ravenwood` and `ravenwood-light` to your `~/.config/omarchy/themes/` directory and ask which one you want to apply.
 
-### Using `omarchy-theme-install` (Recommended)
+### Using `omarchy-theme-install`
 
-Once this repository is hosted on GitHub/GitLab, you can install it directly using the Omarchy theme manager:
+Once this repository is hosted on GitHub/GitLab, you can install it using the Omarchy theme manager:
 
 ```bash
 omarchy-theme-install https://github.com/yourusername/omarchy-ravenwood-theme.git
 ```
 
-This will automatically clone the repository to the correct location and apply the theme.
+**Note:** The `omarchy-theme-install` tool might expect a single theme at the root. If it fails to detect both themes automatically, simply run `./install.sh` from inside the downloaded directory:
+
+```bash
+cd ~/.config/omarchy/themes/ravenwood-theme # (or wherever it cloned)
+./install.sh
+```
 
 ## Theme Details
 
+### Ravenwood (Dark)
 *   **Colors:** Dark background (`#1a1f1c`) with emerald green accents (`#4ade80`).
-*   **Backgrounds:**
-    *   `1-ravenwood-foggy-mountain.jpg`: Signature foggy forest background (Credit: Dharmx).
-*   **Applications:** Configured for btop, vscode, neovim, and icons.
+*   **Background:** `1-ravenwood-foggy-mountain.jpg` (Credit: Dharmx).
+
+### Ravenwood Light
+*   **Colors:** Light background with matching emerald accents.
+*   **Background:** `1-ravenwood-light.jpg`.
 
 ## Credits
 

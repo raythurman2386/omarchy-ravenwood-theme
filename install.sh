@@ -1,58 +1,96 @@
 #!/bin/bash
 set -e
 
-THEME_NAME="ravenwood"
-DEST_DIR="$HOME/.config/omarchy/themes/$THEME_NAME"
+THEMES_DIR="$HOME/.config/omarchy/themes"
 
-echo "Installing $THEME_NAME theme to $DEST_DIR..."
+install_theme() {
+    local theme_name="$1"
+    local source_dir="$theme_name"
+    local dest_dir="$THEMES_DIR/$theme_name"
 
-# Ensure the destination directory exists
-mkdir -p "$DEST_DIR"
+    echo "Installing $theme_name theme to $dest_dir..."
 
-# Copy files. Exclude .git and this script.
-# Using cp with a glob pattern can be messy if hidden files exist.
-# A simpler approach is to copy everything and remove what we don't want,
-# or list files to copy explicitly.
-# Let's list files to copy:
-FILES_TO_COPY=(
-    "backgrounds"
-    "btop.theme"
-    "colors.toml"
-    "icons.theme"
-    "neovim.lua"
-    "preview.png"
-    "vscode.json"
-)
-
-for item in "${FILES_TO_COPY[@]}"; do
-    if [ -e "$item" ]; then
-        cp -r "$item" "$DEST_DIR/"
-    else
-        echo "Warning: $item not found in source directory."
+    if [ ! -d "$source_dir" ]; then
+        echo "Error: Source directory '$source_dir' not found. Are you running this from the repo root?"
+        return 1
     fi
-done
 
-# Cleanup old backgrounds if present (covering various previous naming schemes)
-for old_bg in \
-    "1-ravenwood.jpg" "fog_forest_1.png" \
-    "1-ravenwood-glow.png" "2-ravenwood-gradient.png" \
-    "3-ravenwood-jade-1.jpg" "4-ravenwood-jade-2.jpg" "5-ravenwood-jade-3.jpg" \
-    "2-ravenwood-glow.png" "3-ravenwood-gradient.png" \
-    "4-ravenwood-jade-1.jpg" "5-ravenwood-jade-2.jpg" "6-ravenwood-jade-3.jpg"; do
-    if [ -f "$DEST_DIR/backgrounds/$old_bg" ]; then
-        rm "$DEST_DIR/backgrounds/$old_bg"
+    # Ensure the destination directory exists
+    mkdir -p "$dest_dir"
+
+    # Copy contents
+    cp -r "$source_dir"/* "$dest_dir/"
+
+    # Cleanup old backgrounds for ravenwood (dark)
+    if [ "$theme_name" == "ravenwood" ]; then
+        for old_bg in \
+            "1-ravenwood.jpg" "fog_forest_1.png" \
+            "1-ravenwood-glow.png" "2-ravenwood-gradient.png" \
+            "3-ravenwood-jade-1.jpg" "4-ravenwood-jade-2.jpg" "5-ravenwood-jade-3.jpg" \
+            "2-ravenwood-glow.png" "3-ravenwood-gradient.png" \
+            "4-ravenwood-jade-1.jpg" "5-ravenwood-jade-2.jpg" "6-ravenwood-jade-3.jpg"; do
+            if [ -f "$dest_dir/backgrounds/$old_bg" ]; then
+                rm "$dest_dir/backgrounds/$old_bg"
+            fi
+        done
+        
+        # Setup dynamic theme service
+        if [ -d "$dest_dir/scripts" ]; then
+            echo "Setting up dynamic theme scheduling..."
+            mkdir -p ~/.config/systemd/user
+            
+            # Link service files
+            ln -sf "$dest_dir/scripts/omarchy-dynamic-theme.service" ~/.config/systemd/user/
+            ln -sf "$dest_dir/scripts/omarchy-dynamic-theme.timer" ~/.config/systemd/user/
+            
+            # Reload systemd
+            systemctl --user daemon-reload
+            
+            # Enable and start timer if requested
+            read -p "Do you want to enable the dynamic theme switcher (auto switch Day/Night)? (y/N) " -n 1 -r
+            echo
+            if [[ $REPLY =~ ^[Yy]$ ]]; then
+                systemctl --user enable --now omarchy-dynamic-theme.timer
+                echo "Dynamic theme switcher enabled!"
+                # Run once immediately to set correct theme
+                "$dest_dir/scripts/dynamic-theme.sh"
+            else
+                echo "Skipping dynamic theme setup."
+            fi
+        fi
     fi
-done
 
-echo "Theme installed successfully!"
+    echo "$theme_name installed successfully!"
+}
 
-# Check if omarchy-theme-set is available before offering to apply
+# Install both themes
+install_theme "ravenwood"
+install_theme "ravenwood-light"
+
+echo "---------------------------------------------------"
+echo "Installation complete!"
+
+# Offer to apply
 if command -v omarchy-theme-set &> /dev/null; then
-    read -p "Do you want to apply the theme now? (y/N) " -n 1 -r
     echo
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
-        omarchy-theme-set "$THEME_NAME"
-    fi
+    echo "Which theme would you like to apply now?"
+    echo "1) Ravenwood (Dark)"
+    echo "2) Ravenwood Light"
+    echo "3) None (skip)"
+    echo
+    read -p "Enter your choice (1/2/3): " choice
+    
+    case $choice in
+        1)
+            omarchy-theme-set "ravenwood"
+            ;;
+        2)
+            omarchy-theme-set "ravenwood-light"
+            ;;
+        *)
+            echo "Skipping theme application."
+            ;;
+    esac
 else
     echo "omarchy-theme-set not found. You may need to apply the theme manually."
 fi

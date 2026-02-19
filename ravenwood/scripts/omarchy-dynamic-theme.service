@@ -1,0 +1,6 @@
+[Unit]
+Description=Ravenwood Dynamic Theme Switcher
+
+[Service]
+Type=oneshot
+ExecStart=%h/.config/omarchy/themes/ravenwood/scripts/dynamic-theme.sh

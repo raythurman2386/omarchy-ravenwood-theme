@@ -1,0 +1,10 @@
+[Unit]
+Description=Run Ravenwood Dynamic Theme Switcher
+
+[Timer]
+OnCalendar=*:00
+OnCalendar=*:30
+Persistent=true
+
+[Install]
+WantedBy=timers.target
