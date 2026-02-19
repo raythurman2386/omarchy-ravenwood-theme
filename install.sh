@@ -18,41 +18,43 @@ install_theme() {
     # Ensure the destination directory exists
     mkdir -p "$dest_dir"
 
-    # Copy contents
-    cp -r "$source_dir"/* "$dest_dir/"
+    # Copy contents (using -u to only update newer files if supported, or just cp)
+    cp -ru "$source_dir"/* "$dest_dir/"
 
     # Cleanup old backgrounds and setup scheduling for ravenwood (dark)
     if [ "$theme_name" == "ravenwood" ]; then
-        echo "Cleaning up old backgrounds..."
-        for old_bg in \
-            "1-ravenwood.jpg" "fog_forest_1.png" \
-            "1-ravenwood-glow.png" "2-ravenwood-gradient.png" \
-            "3-ravenwood-jade-1.jpg" "4-ravenwood-jade-2.jpg" "5-ravenwood-jade-3.jpg" \
-            "2-ravenwood-glow.png" "3-ravenwood-gradient.png" \
-            "4-ravenwood-jade-1.jpg" "5-ravenwood-jade-2.jpg" "6-ravenwood-jade-3.jpg"; do
-            if [ -f "$dest_dir/backgrounds/$old_bg" ]; then
-                rm "$dest_dir/backgrounds/$old_bg"
-            fi
-        done
-        
         # Setup dynamic theme service
         if [ -d "$dest_dir/scripts" ]; then
-            echo "Setting up dynamic theme scheduling..."
             mkdir -p ~/.config/systemd/user
             
-            cp "$dest_dir/scripts/omarchy-dynamic-theme.service" ~/.config/systemd/user/
-            cp "$dest_dir/scripts/omarchy-dynamic-theme.timer" ~/.config/systemd/user/
+            # Only copy and reload if files differ
+            local changed=false
+            if ! diff -q "$dest_dir/scripts/omarchy-dynamic-theme.service" ~/.config/systemd/user/omarchy-dynamic-theme.service >/dev/null 2>&1 || \
+               ! diff -q "$dest_dir/scripts/omarchy-dynamic-theme.timer" ~/.config/systemd/user/omarchy-dynamic-theme.timer >/dev/null 2>&1; then
+                echo "Updating systemd units..."
+                cp "$dest_dir/scripts/omarchy-dynamic-theme.service" ~/.config/systemd/user/
+                cp "$dest_dir/scripts/omarchy-dynamic-theme.timer" ~/.config/systemd/user/
+                systemctl --user daemon-reload
+                changed=true
+            fi
             
-            # Reload systemd
-            systemctl --user daemon-reload
-            
-            echo "Dynamic theme switcher installed."
-            read -p "Do you want to enable the dynamic theme switcher (auto switch Day/Night)? (y/N) " -n 1 -r
-            echo
-            if [[ $REPLY =~ ^[Yy]$ ]]; then
-                systemctl --user enable --now omarchy-dynamic-theme.timer
-                echo "Dynamic theme switcher enabled! Running initial check..."
-                "$dest_dir/scripts/dynamic-theme.sh"
+            # Check if timer is already enabled/active
+            if ! systemctl --user is-active --quiet omarchy-dynamic-theme.timer; then
+                echo "Dynamic theme switcher is not currently active."
+                read -p "Do you want to enable the dynamic theme switcher (auto switch Day/Night)? (y/N) " -n 1 -r
+                echo
+                if [[ $REPLY =~ ^[Yy]$ ]]; then
+                    systemctl --user enable --now omarchy-dynamic-theme.timer
+                    echo "Dynamic theme switcher enabled!"
+                    "$dest_dir/scripts/dynamic-theme.sh"
+                fi
+            else
+                if [ "$changed" == true ]; then
+                    systemctl --user restart omarchy-dynamic-theme.timer
+                    echo "Dynamic theme switcher updated and restarted."
+                else
+                    echo "Dynamic theme switcher is already active and up to date."
+                fi
             fi
         fi
     fi
