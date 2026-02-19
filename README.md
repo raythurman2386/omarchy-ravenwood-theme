@@ -31,9 +31,7 @@ This will automatically clone the repository to the correct location and apply t
 
 *   **Colors:** Dark background (`#1a1f1c`) with emerald green accents (`#4ade80`).
 *   **Backgrounds:**
-    *   `1-ravenwood-glow.png`: Custom generated emerald glow.
-    *   `2-ravenwood-gradient.png`: Custom generated emerald gradient.
-    *   `3-ravenwood-jade-1.jpg`, `4-ravenwood-jade-2.jpg`, `5-ravenwood-jade-3.jpg`: High-quality jade backgrounds.
+    *   `1-ravenwood-foggy-mountain.jpg`: Signature foggy forest background (Credit: Dharmx).
 *   **Applications:** Configured for btop, vscode, neovim, and icons.
 
 ## Credits

@@ -32,13 +32,17 @@ for item in "${FILES_TO_COPY[@]}"; do
     fi
 done
 
-# Cleanup old backgrounds if present
-if [ -f "$DEST_DIR/backgrounds/1-ravenwood.jpg" ]; then
-    rm "$DEST_DIR/backgrounds/1-ravenwood.jpg"
-fi
-if [ -f "$DEST_DIR/backgrounds/fog_forest_1.png" ]; then
-    rm "$DEST_DIR/backgrounds/fog_forest_1.png"
-fi
+# Cleanup old backgrounds if present (covering various previous naming schemes)
+for old_bg in \
+    "1-ravenwood.jpg" "fog_forest_1.png" \
+    "1-ravenwood-glow.png" "2-ravenwood-gradient.png" \
+    "3-ravenwood-jade-1.jpg" "4-ravenwood-jade-2.jpg" "5-ravenwood-jade-3.jpg" \
+    "2-ravenwood-glow.png" "3-ravenwood-gradient.png" \
+    "4-ravenwood-jade-1.jpg" "5-ravenwood-jade-2.jpg" "6-ravenwood-jade-3.jpg"; do
+    if [ -f "$DEST_DIR/backgrounds/$old_bg" ]; then
+        rm "$DEST_DIR/backgrounds/$old_bg"
+    fi
+done
 
 echo "Theme installed successfully!"
 
