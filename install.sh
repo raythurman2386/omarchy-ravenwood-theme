@@ -1,16 +1,18 @@
 #!/bin/bash
 set -e
 
+# Get absolute path to the directory containing this script
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 THEMES_DIR="$HOME/.config/omarchy/themes"
 
 install_theme() {
     local theme_name="$1"
-    local source_dir="$(dirname "$0")/$theme_name"
+    local source_dir="$SCRIPT_DIR/$theme_name"
     local dest_dir="$THEMES_DIR/$theme_name"
 
     echo "Installing $theme_name theme to $dest_dir..."
 
-    if [ ! -d "$source_dir" ]; then
+    if [[ ! -d "$source_dir" ]]; then
         echo "Error: Source directory '$source_dir' not found. Are you running this from the repo root?"
         return 1
     fi
@@ -18,13 +20,12 @@ install_theme() {
     # Ensure the destination directory exists
     mkdir -p "$dest_dir"
 
-    # Copy contents (using -u to only update newer files if supported, or just cp)
-    cp -ru "$source_dir"/* "$dest_dir/"
+    # Use rsync to ensure an exact 1:1 copy (removes orphaned files, includes dotfiles)
+    rsync -a --delete "$source_dir/" "$dest_dir/"
 
-    # Cleanup old backgrounds and setup scheduling for ravenwood (dark)
-    if [ "$theme_name" == "ravenwood" ]; then
-        # Setup dynamic theme service
-        if [ -d "$dest_dir/scripts" ]; then
+    # Setup scheduling for ravenwood (dark)
+    if [[ "$theme_name" == "ravenwood" ]]; then
+        if [[ -d "$dest_dir/scripts" ]]; then
             mkdir -p ~/.config/systemd/user
             
             # Only copy and reload if files differ
@@ -39,12 +40,14 @@ install_theme() {
             fi
             
             # Make scripts executable
-            chmod +x "$dest_dir/scripts/dynamic-theme.sh"
-            chmod +x "$dest_dir/scripts/waybar-theme-widget.sh" || true
+            chmod +x "$dest_dir/scripts/"*.sh || true
             
-            # Check if timer is already enabled/active
-            if ! systemctl --user is-active --quiet omarchy-dynamic-theme.timer; then
-                echo "Dynamic theme switcher is not currently active."
+            # Check if user has explicitly disabled or enabled the timer
+            local is_enabled
+            is_enabled=$(systemctl --user is-enabled omarchy-dynamic-theme.timer 2>/dev/null || echo "disabled")
+
+            if [[ "$is_enabled" == "disabled" || "$is_enabled" == "static" ]]; then
+                echo "Dynamic theme switcher is currently disabled."
                 read -p "Do you want to enable the dynamic theme switcher (auto switch Day/Night)? (y/N) " -n 1 -r
                 echo
                 if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -53,11 +56,11 @@ install_theme() {
                     "$dest_dir/scripts/dynamic-theme.sh"
                 fi
             else
-                if [ "$changed" == true ]; then
+                if [[ "$changed" == "true" ]]; then
                     systemctl --user restart omarchy-dynamic-theme.timer
                     echo "Dynamic theme switcher updated and restarted."
                 else
-                    echo "Dynamic theme switcher is already active and up to date."
+                    echo "Dynamic theme switcher is already enabled and up to date."
                 fi
             fi
         fi
