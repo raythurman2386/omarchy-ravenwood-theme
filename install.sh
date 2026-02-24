@@ -38,6 +38,10 @@ install_theme() {
                 changed=true
             fi
             
+            # Make scripts executable
+            chmod +x "$dest_dir/scripts/dynamic-theme.sh"
+            chmod +x "$dest_dir/scripts/waybar-theme-widget.sh" || true
+            
             # Check if timer is already enabled/active
             if ! systemctl --user is-active --quiet omarchy-dynamic-theme.timer; then
                 echo "Dynamic theme switcher is not currently active."
