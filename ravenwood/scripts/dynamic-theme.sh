@@ -20,6 +20,11 @@ fi
 
 # Get current theme and normalize it (e.g., "Ravenwood Light" -> "ravenwood-light")
 # omarchy-theme-current returns "Ravenwood Light", but we need "ravenwood-light" for commands
+if ! command -v omarchy-theme-current &>/dev/null; then
+    echo "Error: omarchy-theme-current not found. Is Omarchy installed?"
+    exit 1
+fi
+
 CURRENT_THEME_RAW=$(omarchy-theme-current)
 CURRENT_THEME=$(echo "$CURRENT_THEME_RAW" | tr '[:upper:]' '[:lower:]' | sed 's/ /-/g')
 
@@ -32,11 +37,17 @@ fi
 # Only switch if needed to avoid restarting things unnecessarily
 if [[ "$CURRENT_THEME" != "$TARGET_THEME" ]]; then
     echo "Time is $(date +%H:%M). Switching to $MODE theme: $TARGET_THEME"
-    # Use the full path or ensure it's in PATH. Omarchy commands are usually in PATH.
-    omarchy-theme-set "$TARGET_THEME"
     
-    # Send notification
-    notify-send "Dynamic Theme" "Switched to $TARGET_THEME ($MODE mode)"
+    # Use the full path or ensure it's in PATH. Omarchy commands are usually in PATH.
+    if ! omarchy-theme-set "$TARGET_THEME"; then
+        echo "Error: Failed to set theme $TARGET_THEME"
+        exit 1
+    fi
+    
+    # Send notification (only if notify-send is available)
+    if command -v notify-send &>/dev/null; then
+        notify-send "Dynamic Theme" "Switched to $TARGET_THEME ($MODE mode)"
+    fi
 else
     echo "Already on $TARGET_THEME ($MODE mode). No change needed."
 fi
