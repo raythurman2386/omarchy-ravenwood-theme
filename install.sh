@@ -1,6 +1,12 @@
 #!/bin/bash
 set -e
 
+# Check for required dependencies
+if ! command -v rsync &>/dev/null; then
+    echo "Error: rsync is required but not installed"
+    exit 1
+fi
+
 # Get absolute path to the directory containing this script
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 THEMES_DIR="$HOME/.config/omarchy/themes"
@@ -46,7 +52,7 @@ install_theme() {
             local is_enabled
             is_enabled=$(systemctl --user is-enabled omarchy-dynamic-theme.timer 2>/dev/null || echo "disabled")
 
-            if [[ "$is_enabled" == "disabled" || "$is_enabled" == "static" ]]; then
+            if [[ "$is_enabled" == "disabled" || "$is_enabled" == "static" || "$is_enabled" == "masked" ]]; then
                 echo "Dynamic theme switcher is currently disabled."
                 read -p "Do you want to enable the dynamic theme switcher (auto switch Day/Night)? (y/N) " -n 1 -r
                 echo

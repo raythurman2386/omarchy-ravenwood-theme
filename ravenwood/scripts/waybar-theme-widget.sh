@@ -28,10 +28,13 @@ case "$1" in
             notify-send "Dynamic Theme" "Switched to $TARGET_THEME ($MODE mode)"
         fi
         
-        omarchy-theme-set "$TARGET_THEME"
-        
-        # Trigger an immediate Waybar widget update (signal 9)
-        pkill -RTMIN+9 waybar
+        # Apply theme and only update waybar if successful
+        if omarchy-theme-set "$TARGET_THEME"; then
+            # Trigger an immediate Waybar widget update (signal 9) if waybar is running
+            if pgrep -x waybar &>/dev/null; then
+                pkill -RTMIN+9 waybar
+            fi
+        fi
         ;;
         
     "toggle-timer")
@@ -46,8 +49,10 @@ case "$1" in
             ~/.config/omarchy/themes/ravenwood/scripts/dynamic-theme.sh
         fi
         
-        # Trigger an immediate Waybar widget update (signal 9)
-        pkill -RTMIN+9 waybar
+        # Trigger an immediate Waybar widget update (signal 9) if waybar is running
+        if pgrep -x waybar &>/dev/null; then
+            pkill -RTMIN+9 waybar
+        fi
         ;;
         
     "status"|*)
