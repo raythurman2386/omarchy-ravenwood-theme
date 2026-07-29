@@ -6,39 +6,43 @@ local M = {}
 
 -- Color palette
 local colors = {
-	bg = "#1a1f1c",
+	bg = "#222822",
 	fg = "#e8d5b7",
 	accent = "#4ade80",
 	cursor = "#e8d5b7",
 	selection_bg = "#e8d5b7",
-	selection_fg = "#1a1f1c",
+	selection_fg = "#222822",
 	
-	-- ANSI colors
+	-- ANSI colors (dim variants for dark 8, per skill terminal recipe)
 	black = "#2d3830",
+	white = "#e8d5b7",
+	bright_black = "#3d4a40",
+	bright_white = "#e8d5b7",
+	
+	-- Full accent colors (used for syntax highlights + bright ANSI 8)
 	red = "#e67e80",
+	orange = "#e69875",
 	green = "#4ade80",
 	yellow = "#fbbf24",
 	blue = "#22d3ee",
 	magenta = "#f472b6",
 	cyan = "#34d399",
-	white = "#e8d5b7",
 	
-	-- Bright variants
-	bright_black = "#3d4a40",
-	bright_red = "#e67e80",
-	bright_green = "#4ade80",
-	bright_yellow = "#fbbf24",
-	bright_blue = "#22d3ee",
-	bright_magenta = "#f472b6",
-	bright_cyan = "#34d399",
-	bright_white = "#e8d5b7",
+	-- Dim accent variants (dark ANSI 8)
+	dim_red = "#da6362",
+	dim_orange = "#d77f48",
+	dim_green = "#5e8d5e",
+	dim_yellow = "#bf983d",
+	dim_blue = "#5a93a2",
+	dim_magenta = "#b87b9d",
+	dim_aqua = "#447d6b",
 	
 	-- UI colors
-	dark_bg = "#141816",
+	dark_bg = "#141814",
 	light_bg = "#2d3830",
-	comment = "#5c6b5f",
-	dimmed = "#7a8a7d",
-	line_nr = "#3d4a40",
+	comment = "#7f897d",
+	dimmed = "#859289",
+	line_nr = "#7f897d",
 	line_nr_cursor = "#4ade80",
 }
 
@@ -58,6 +62,12 @@ function M.setup()
 	vim.g.colors_name = "ravenwood"
 	vim.o.background = "dark"
 	vim.o.termguicolors = true
+	vim.g.terminal_ansi_colors = {
+		colors.black, colors.dim_red, colors.dim_green, colors.dim_yellow,
+		colors.dim_blue, colors.dim_magenta, colors.dim_aqua, colors.white,
+		colors.bright_black, colors.red, colors.green, colors.yellow,
+		colors.blue, colors.magenta, colors.cyan, colors.bright_white,
+	}
 	
 	-- Editor highlights
 	set_hl("Normal", { fg = colors.fg, bg = colors.bg })
@@ -114,25 +124,25 @@ function M.setup()
 	set_hl("Title", { fg = colors.accent, bold = true })
 	set_hl("Visual", { bg = colors.selection_bg, fg = colors.selection_fg })
 	set_hl("VisualNOS", { bg = colors.light_bg })
-	set_hl("WarningMsg", { fg = colors.yellow, bold = true })
+	set_hl("WarningMsg", { fg = colors.orange, bg = colors.dark_bg, bold = true })
 	set_hl("Whitespace", { fg = colors.line_nr })
 	set_hl("WildMenu", { fg = colors.bg, bg = colors.accent })
 	
 	-- Syntax highlights
 	set_hl("Comment", { fg = colors.comment, italic = true })
-	set_hl("Constant", { fg = colors.cyan })
-	set_hl("String", { fg = colors.green })
-	set_hl("Character", { fg = colors.green })
-	set_hl("Number", { fg = colors.magenta })
-	set_hl("Boolean", { fg = colors.magenta })
-	set_hl("Float", { fg = colors.magenta })
-	set_hl("Identifier", { fg = colors.fg })
-	set_hl("Function", { fg = colors.blue })
+	set_hl("Constant", { fg = colors.yellow })
+	set_hl("String", { fg = colors.yellow })
+	set_hl("Character", { fg = colors.yellow })
+	set_hl("Number", { fg = colors.yellow })
+	set_hl("Boolean", { fg = colors.yellow })
+	set_hl("Float", { fg = colors.yellow })
+	set_hl("Identifier", { fg = colors.green })
+	set_hl("Function", { fg = colors.orange })
 	set_hl("Statement", { fg = colors.red })
 	set_hl("Conditional", { fg = colors.red })
 	set_hl("Repeat", { fg = colors.red })
 	set_hl("Label", { fg = colors.red })
-	set_hl("Operator", { fg = colors.yellow })
+	set_hl("Operator", { fg = colors.blue })
 	set_hl("Keyword", { fg = colors.red })
 	set_hl("Exception", { fg = colors.red })
 	set_hl("PreProc", { fg = colors.yellow })
@@ -144,15 +154,15 @@ function M.setup()
 	set_hl("StorageClass", { fg = colors.yellow })
 	set_hl("Structure", { fg = colors.cyan })
 	set_hl("Typedef", { fg = colors.yellow })
-	set_hl("Special", { fg = colors.yellow })
-	set_hl("SpecialChar", { fg = colors.yellow })
+	set_hl("Special", { fg = colors.magenta })
+	set_hl("SpecialChar", { fg = colors.magenta })
 	set_hl("Tag", { fg = colors.blue })
 	set_hl("Delimiter", { fg = colors.dimmed })
 	set_hl("SpecialComment", { fg = colors.comment, italic = true })
 	set_hl("Debug", { fg = colors.red })
 	set_hl("Underlined", { underline = true })
 	set_hl("Ignore", { fg = colors.dimmed })
-	set_hl("Error", { fg = colors.red, bold = true })
+	set_hl("Error", { fg = colors.red, bg = colors.dark_bg, bold = true })
 	set_hl("Todo", { fg = colors.yellow, bg = colors.light_bg, bold = true })
 	
 	-- LSP highlights
@@ -165,15 +175,15 @@ function M.setup()
 	
 	-- Diagnostic highlights
 	set_hl("DiagnosticError", { fg = colors.red })
-	set_hl("DiagnosticWarn", { fg = colors.yellow })
+	set_hl("DiagnosticWarn", { fg = colors.orange })
 	set_hl("DiagnosticInfo", { fg = colors.blue })
 	set_hl("DiagnosticHint", { fg = colors.cyan })
 	set_hl("DiagnosticVirtualTextError", { fg = colors.red, bg = "#2a1e1e" })
-	set_hl("DiagnosticVirtualTextWarn", { fg = colors.yellow, bg = "#2a261e" })
+	set_hl("DiagnosticVirtualTextWarn", { fg = colors.orange, bg = "#2a261e" })
 	set_hl("DiagnosticVirtualTextInfo", { fg = colors.blue, bg = "#1e262a" })
 	set_hl("DiagnosticVirtualTextHint", { fg = colors.cyan, bg = "#1e2a26" })
 	set_hl("DiagnosticUnderlineError", { sp = colors.red, undercurl = true })
-	set_hl("DiagnosticUnderlineWarn", { sp = colors.yellow, undercurl = true })
+	set_hl("DiagnosticUnderlineWarn", { sp = colors.orange, undercurl = true })
 	set_hl("DiagnosticUnderlineInfo", { sp = colors.blue, undercurl = true })
 	set_hl("DiagnosticUnderlineHint", { sp = colors.cyan, undercurl = true })
 	set_hl("DiagnosticFloatingError", { fg = colors.red })
@@ -197,14 +207,14 @@ function M.setup()
 	set_hl("GitSignsDeleteLn", { bg = "#3a1e1e" })
 	
 	-- Treesitter highlights
-	set_hl("@attribute", { fg = colors.yellow })
-	set_hl("@boolean", { fg = colors.magenta })
-	set_hl("@character", { fg = colors.green })
+	set_hl("@attribute", { fg = colors.blue })
+	set_hl("@boolean", { fg = colors.yellow })
+	set_hl("@character", { fg = colors.yellow })
 	set_hl("@character.special", { fg = colors.yellow })
 	set_hl("@comment", { fg = colors.comment, italic = true })
 	set_hl("@comment.documentation", { fg = colors.comment, italic = true })
 	set_hl("@conditional", { fg = colors.red })
-	set_hl("@constant", { fg = colors.magenta })
+	set_hl("@constant", { fg = colors.yellow })
 	set_hl("@constant.builtin", { fg = colors.magenta })
 	set_hl("@constant.macro", { fg = colors.yellow })
 	set_hl("@constructor", { fg = colors.cyan })
@@ -212,10 +222,10 @@ function M.setup()
 	set_hl("@define", { fg = colors.red })
 	set_hl("@exception", { fg = colors.red })
 	set_hl("@field", { fg = colors.fg })
-	set_hl("@float", { fg = colors.magenta })
-	set_hl("@function", { fg = colors.blue })
-	set_hl("@function.builtin", { fg = colors.blue })
-	set_hl("@function.call", { fg = colors.blue })
+	set_hl("@float", { fg = colors.yellow })
+	set_hl("@function", { fg = colors.orange })
+	set_hl("@function.builtin", { fg = colors.orange })
+	set_hl("@function.call", { fg = colors.orange })
 	set_hl("@function.macro", { fg = colors.yellow })
 	set_hl("@include", { fg = colors.red })
 	set_hl("@keyword", { fg = colors.red })
@@ -224,12 +234,12 @@ function M.setup()
 	set_hl("@keyword.return", { fg = colors.red })
 	set_hl("@label", { fg = colors.red })
 	set_hl("@macro", { fg = colors.yellow })
-	set_hl("@method", { fg = colors.blue })
-	set_hl("@method.call", { fg = colors.blue })
+	set_hl("@method", { fg = colors.orange })
+	set_hl("@method.call", { fg = colors.orange })
 	set_hl("@namespace", { fg = colors.cyan })
 	set_hl("@none", {})
-	set_hl("@number", { fg = colors.magenta })
-	set_hl("@operator", { fg = colors.yellow })
+	set_hl("@number", { fg = colors.yellow })
+	set_hl("@operator", { fg = colors.blue })
 	set_hl("@parameter", { fg = colors.fg })
 	set_hl("@parameter.reference", { fg = colors.fg })
 	set_hl("@preproc", { fg = colors.yellow })
@@ -239,7 +249,7 @@ function M.setup()
 	set_hl("@punctuation.special", { fg = colors.dimmed })
 	set_hl("@repeat", { fg = colors.red })
 	set_hl("@storageclass", { fg = colors.yellow })
-	set_hl("@string", { fg = colors.green })
+	set_hl("@string", { fg = colors.yellow })
 	set_hl("@string.escape", { fg = colors.yellow })
 	set_hl("@string.regex", { fg = colors.yellow })
 	set_hl("@string.special", { fg = colors.yellow })
@@ -264,12 +274,12 @@ function M.setup()
 	set_hl("@text.title", { fg = colors.accent, bold = true })
 	set_hl("@text.underline", { underline = true })
 	set_hl("@text.uri", { fg = colors.blue, underline = true })
-	set_hl("@text.warning", { fg = colors.yellow })
+	set_hl("@text.warning", { fg = colors.orange })
 	set_hl("@type", { fg = colors.cyan })
 	set_hl("@type.builtin", { fg = colors.cyan })
 	set_hl("@type.definition", { fg = colors.cyan })
 	set_hl("@type.qualifier", { fg = colors.red })
-	set_hl("@variable", { fg = colors.fg })
+	set_hl("@variable", { fg = colors.green })
 	set_hl("@variable.builtin", { fg = colors.magenta })
 	
 	-- WhichKey highlights
@@ -348,9 +358,9 @@ function M.setup()
 	set_hl("NotifyERRORBorder", { fg = colors.red })
 	set_hl("NotifyERRORIcon", { fg = colors.red })
 	set_hl("NotifyERRORTitle", { fg = colors.red })
-	set_hl("NotifyWARNBorder", { fg = colors.yellow })
-	set_hl("NotifyWARNIcon", { fg = colors.yellow })
-	set_hl("NotifyWARNTitle", { fg = colors.yellow })
+	set_hl("NotifyWARNBorder", { fg = colors.orange })
+	set_hl("NotifyWARNIcon", { fg = colors.orange })
+	set_hl("NotifyWARNTitle", { fg = colors.orange })
 	set_hl("NotifyINFOBorder", { fg = colors.blue })
 	set_hl("NotifyINFOIcon", { fg = colors.blue })
 	set_hl("NotifyINFOTitle", { fg = colors.blue })
