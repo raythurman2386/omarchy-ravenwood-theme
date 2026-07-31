@@ -79,8 +79,43 @@ install_theme() {
 install_theme "ravenwood"
 install_theme "ravenwood-light"
 
+# Install VS Code static themes (skip if the extension is already installed)
+VSCODE_EXT_DIRS=(
+    "$HOME/.vscode/extensions"
+    "$HOME/.vscode-oss/extensions"
+    "$HOME/.vscode-server/extensions"
+)
+VSCODE_EXT_INSTALLED=false
+for ext_dir in "${VSCODE_EXT_DIRS[@]}"; do
+    if ls "$ext_dir"/raymondthurman.ravenwood* >/dev/null 2>&1; then
+        VSCODE_EXT_INSTALLED=true
+        break
+    fi
+done
+
+if [[ "$VSCODE_EXT_INSTALLED" == "true" ]]; then
+    echo "VS Code extension 'Ravenwood' detected — skipping static theme install."
+else
+    echo "Installing VS Code static themes..."
+    VSCODE_THEMES_DIR="$HOME/.config/omarchy/themes/vscode"
+    mkdir -p "$VSCODE_THEMES_DIR"
+    cp "$SCRIPT_DIR/vscode/ravenwood-dark.json" "$VSCODE_THEMES_DIR/"
+    cp "$SCRIPT_DIR/vscode/ravenwood-light.json" "$VSCODE_THEMES_DIR/"
+    echo "VS Code themes installed to $VSCODE_THEMES_DIR/"
+fi
+
+# Install Zed theme
+ZED_THEMES_DIR="$HOME/.config/zed/themes"
+if command -v zed &>/dev/null; then
+    mkdir -p "$ZED_THEMES_DIR"
+    cp "$SCRIPT_DIR/zed/ravenwood.json" "$ZED_THEMES_DIR/ravenwood.json"
+    echo "Zed theme installed to $ZED_THEMES_DIR/ravenwood.json"
+fi
+
 echo "---------------------------------------------------"
 echo "Installation complete!"
 echo "You can apply themes manually with:"
 echo "  omarchy-theme-set ravenwood"
 echo "  omarchy-theme-set ravenwood-light"
+echo "  VS Code: Open Command Palette > Preferences: Color Theme > Ravenwood Dark / Light"
+echo "  Zed: Select 'Ravenwood Dark' or 'Ravenwood Light' in theme selector"
