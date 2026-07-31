@@ -3,12 +3,15 @@
 This file provides machine-readable context and instructions for AI agents (like OpenCode) interacting with the `omarchy-ravenwood-theme` repository.
 
 ## Project Overview
-- **Purpose:** A dual-variant (Dark/Light) theme collection for the Omarchy environment.
+- **Purpose:** A dual-variant (Dark/Light) theme collection for the Omarchy environment, with static themes for VS Code and Zed.
 - **Main Components:**
   - `ravenwood/`: Dark theme assets and configuration.
   - `ravenwood-light/`: Light theme assets and configuration.
   - `install.sh`: Central installation and configuration script.
   - `ravenwood/scripts/dynamic-theme.sh`: Logic for automatic theme switching based on time.
+  - `vscode/`: Static VS Code theme JSON files (ravenwood-dark.json, ravenwood-light.json).
+  - `zed/`: Zed theme JSON file (ravenwood.json) with both variants.
+  - `scripts/`: Utility scripts (rebuild-zed-theme.py, compare-zed-vscode.py).
 
 ## Critical Paths & Files
 - **Root:** `.`
@@ -16,6 +19,7 @@ This file provides machine-readable context and instructions for AI agents (like
 - **Installation Target:** `~/.config/omarchy/themes/`
 - **Color Definitions:** `**/colors.toml` (TOML format)
 - **App Configs:** `**/neovim.lua`, `**/vscode.json`, `**/btop.theme`
+- **Editor Themes:** `./vscode/`, `./zed/`
 - **Systemd Units:** `ravenwood/scripts/omarchy-dynamic-theme.{service,timer}`
 
 ## Environment Setup & Commands
