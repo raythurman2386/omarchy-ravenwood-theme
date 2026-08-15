@@ -1,10 +1,39 @@
-accent = "#064e3b"
-cursor = "#3f4a45"
-foreground = "#3f4a45"
-background = "#f5f4ed"
-selection_foreground = "#f5f4ed"
-selection_background = "#3f4a45"
+# Ravenwood Light Theme - Emerald Edition
+mode = "light"
 
+accent = "#064e3b"
+selection = "#3f4a45"
+selection_foreground = "#f5f4ed"
+muted = "#7a8478"
+
+background = "#f5f4ed"
+dark_background = "#f1f0e7"
+darker_background = "#edece1"
+lighter_background = "#e8e7dc"
+
+foreground = "#3f4a45"
+dark_foreground = "#6b7566"
+light_foreground = "#5c6658"
+bright_foreground = "#3f4a45"
+
+red = "#c92a2a"
+yellow = "#92400e"
+orange = "#c2410c"
+green = "#064e3b"
+cyan = "#0f766e"
+blue = "#2563eb"
+magenta = "#c026a3"
+brown = "#7c2d12"
+
+bright_red = "#c92a2a"
+bright_yellow = "#92400e"
+bright_green = "#064e3b"
+bright_cyan = "#0f766e"
+bright_blue = "#2563eb"
+bright_magenta = "#c026a3"
+
+# Legacy ANSI palette (dim variants for the dark 8, full for the bright 8).
+# Kept for terminal consumers that reference colorN directly.
 color0 = "#5c6658"
 color1 = "#9b1c1c"
 color2 = "#053d29"
