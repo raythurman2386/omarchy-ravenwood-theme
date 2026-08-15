@@ -63,10 +63,40 @@ You can use the standard theme installer to download the repository, but you **m
 ### Ravenwood (Dark)
 *   **Colors:** Dark background (`#222822`) with emerald green accents (`#4ade80`).
 *   **Background:** `1-ravenwood-foggy-mountain.jpg` (Credit: Dharmx).
+*   **Plymouth:** Ships `unlock.png` + `preview-unlock.png` for the boot/login screen.
 
 ### Ravenwood Light
 *   **Colors:** Light background (`#f5f4ed`) with deep emerald accents (`#064e3b`).
 *   **Background:** `1-ravenwood-light.jpg`.
+*   **Plymouth:** Ships `unlock.png` + `preview-unlock.png` for the boot/login screen.
+
+## Omarchy Quattro (v4.0.0) Compatibility
+
+Both `colors.toml` files use the **semantic palette schema** introduced in Omarchy Quattro:
+
+- `mode` (`dark` / `light`), `accent`, `selection`, `muted`
+- `background` / `dark_background` / `darker_background` / `lighter_background`
+- `foreground` / `dark_foreground` / `light_foreground` / `bright_foreground`
+- Named accents: `red`, `yellow`, `orange`, `green`, `cyan`, `blue`, `magenta`, `brown` (+ `bright_*` variants)
+
+The legacy `color0`–`color15` ANSI keys are kept for terminal consumers that reference them directly. The Quattro resolver maps semantic keys to the full (non-dim) accent colors, so the shell bar's active/error color and Hyprland borders use the correct full accents.
+
+To apply the theme to the Plymouth boot screen:
+```bash
+omarchy plymouth set by theme ravenwood
+omarchy plymouth set by theme ravenwood-light
+```
+
+### Hermes TUI skin sync
+
+A theme-set hook (`ravenwood/scripts/omarchy-theme-set-hermes-skin.hook`, installed to `~/.config/omarchy/hooks/theme-set.d/`) flips the Hermes TUI skin so text stays legible on the light/dark terminal background. It runs on **every** `omarchy-theme-set` (manual, timer, or waybar widget), not just the timer.
+
+The Hermes TUI can't reliably detect foot's background (no `TERM_PROGRAM`/`COLORFGBG`, and the OSC-11 probe is silent), so the hook pins the skin explicitly:
+
+- **`ravenwood-light`** → `ravenwood-light` skin (a custom skin in `~/.hermes/skins/ravenwood-light.yaml` that authors a light `background`, forcing the TUI to render light)
+- **`ravenwood`** → `default` (dark) skin
+
+Edit the hook to change the mapping.
 
 ## Credits
 

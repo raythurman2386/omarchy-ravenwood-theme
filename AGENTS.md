@@ -17,8 +17,9 @@ This file provides machine-readable context and instructions for AI agents (like
 - **Root:** `.`
 - **Themes Source:** `./ravenwood`, `./ravenwood-light`
 - **Installation Target:** `~/.config/omarchy/themes/`
-- **Color Definitions:** `**/colors.toml` (TOML format)
+- **Color Definitions:** `**/colors.toml` (TOML format, semantic Quattro schema)
 - **App Configs:** `**/neovim.lua`, `**/vscode.json`, `**/btop.theme`
+- **Plymouth Assets:** `**/unlock.png`, `**/preview-unlock.png`
 - **Editor Themes:** `./vscode/`, `./zed/`
 - **Systemd Units:** `ravenwood/scripts/omarchy-dynamic-theme.{service,timer}`
 
@@ -46,6 +47,8 @@ Themes are applied via the `omarchy` CLI:
 
 ### Configuration
 - `colors.toml` is the source of truth for color palettes.
+- Use the **semantic Quattro schema** (`mode`, `accent`, `selection`, `muted`, `background`/`dark_background`/`darker_background`/`lighter_background`, `foreground`/`dark_foreground`/`light_foreground`/`bright_foreground`, named accents `red`/`green`/`yellow`/`blue`/`magenta`/`cyan`/`orange`/`brown` + `bright_*`).
+- Keep the legacy `color0`–`color15` ANSI keys for terminal consumers (dim variants for the dark 8, full for the bright 8).
 - Ensure hex codes are consistent across application-specific config files (`vscode.json`, etc.).
 
 ### Dynamic Theme Logic
