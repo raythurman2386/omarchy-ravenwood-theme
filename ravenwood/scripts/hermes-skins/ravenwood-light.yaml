@@ -1,0 +1,49 @@
+name: ravenwood-light
+description: Ravenwood light — warm cream background with dark olive text and emerald accents
+
+colors:
+  # Authoring a light background forces the TUI to treat the terminal as
+  # light (skinIsLight), which foot can't detect on its own (no TERM_PROGRAM /
+  # COLORFGBG, silent OSC-11). Without this the dark base palette is used and
+  # prose blends into the light background.
+  background: "#f5f4ed"
+
+  # Brand accent — emerald hero green, legible on the cream background.
+  ui_accent: "#064e3b"
+  banner_accent: "#064e3b"
+
+  # Text hierarchy — dark olive ink on warm cream.
+  banner_title: "#222822"
+  banner_text: "#3f4a45"
+  ui_text: "#3f4a45"
+  banner_dim: "#6b7566"
+  banner_border: "#e8e7dc"
+  ui_border: "#e8e7dc"
+
+  # Semantic status.
+  ui_ok: "#15803d"
+  ui_warn: "#b45309"
+  ui_error: "#b91c1c"
+
+  # CLI / TUI chrome.
+  prompt: "#3f4a45"
+  input_rule: "#064e3b"
+  response_border: "#064e3b"
+  status_bar_bg: "#e8e7dc"
+  status_bar_text: "#3f4a45"
+  status_bar_good: "#15803d"
+  status_bar_warn: "#b45309"
+  status_bar_critical: "#b91c1c"
+  session_label: "#064e3b"
+  session_border: "#e8e7dc"
+  completion_menu_bg: "#f5f4ed"
+  completion_menu_current_bg: "#e8e7dc"
+  selection_bg: "#e8e7dc"
+  voice_status_bg: "#e8e7dc"
+
+branding:
+  agent_name: Hermes Agent
+  prompt_symbol: "❯"
+  help_header: "(^_^)? Commands"
+
+tool_prefix: "┊"

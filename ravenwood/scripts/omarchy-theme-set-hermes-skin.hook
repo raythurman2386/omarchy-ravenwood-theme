@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# Sync the Hermes TUI skin to the Omarchy theme that was just set.
+# $1 is the snake-cased theme name (e.g. "ravenwood-light").
+#
+# The Hermes TUI can't reliably detect foot's background (no TERM_PROGRAM /
+# COLORFGBG, and the OSC-11 probe is silent), so we pin the skin explicitly.
+# The light skin authors a light `background` so the TUI's skinIsLight() treats
+# the terminal as light regardless of detection — otherwise the dark base
+# palette is used and prose blends into the light background.
+
+case "$1" in
+    ravenwood-light)
+        hermes config set display.skin ravenwood-light >/dev/null 2>&1
+        ;;
+    ravenwood)
+        hermes config set display.skin default >/dev/null 2>&1
+        ;;
+esac

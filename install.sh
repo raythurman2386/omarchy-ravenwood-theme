@@ -79,6 +79,25 @@ install_theme() {
 install_theme "ravenwood"
 install_theme "ravenwood-light"
 
+# Install the theme-set hook that syncs the Hermes TUI skin to the active theme
+HOOK_SRC="$SCRIPT_DIR/ravenwood/scripts/omarchy-theme-set-hermes-skin.hook"
+HOOK_DEST="$HOME/.config/omarchy/hooks/theme-set.d/omarchy-theme-set-hermes-skin"
+if [[ -f "$HOOK_SRC" ]]; then
+    mkdir -p "$(dirname "$HOOK_DEST")"
+    cp "$HOOK_SRC" "$HOOK_DEST"
+    chmod +x "$HOOK_DEST"
+    echo "Hermes skin-sync hook installed to $HOOK_DEST"
+fi
+
+# Install the Ravenwood light Hermes skin (used by the hook for light mode)
+HERMES_SKIN_SRC="$SCRIPT_DIR/ravenwood/scripts/hermes-skins/ravenwood-light.yaml"
+HERMES_SKIN_DEST="$HOME/.hermes/skins/ravenwood-light.yaml"
+if [[ -f "$HERMES_SKIN_SRC" ]]; then
+    mkdir -p "$(dirname "$HERMES_SKIN_DEST")"
+    cp "$HERMES_SKIN_SRC" "$HERMES_SKIN_DEST"
+    echo "Ravenwood light Hermes skin installed to $HERMES_SKIN_DEST"
+fi
+
 # Install VS Code static themes (skip if the extension is already installed)
 VSCODE_EXT_DIRS=(
     "$HOME/.vscode/extensions"
